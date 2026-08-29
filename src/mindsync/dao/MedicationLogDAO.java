@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;
 import mindsync.model.MedicationLog;
+import mindsync.model.Prescription;
 
 import javax.management.openmbean.InvalidOpenTypeException;
 
@@ -37,5 +38,31 @@ public class MedicationLogDAO {
             return false;
         }
     }
+    public List<MedicationLog> getLogsByPatientId(String patientId) {
+        String sql = "SELECT * FROM medicationLogs WHERE patientId = ?";
 
-}
+        List<MedicationLog> list = new ArrayList<>();
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, patientId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String prescriptionId = rs.getString("prescriptionId");
+                String date = rs.getString("date");
+                boolean taken = rs.getBoolean("taken");
+                String note = rs.getString("note");
+
+                MedicationLog m = new MedicationLog(id, patientId, prescriptionId, date, taken, note);
+                list.add(m);
+            }
+            return list;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return list;
+        }
+    }
