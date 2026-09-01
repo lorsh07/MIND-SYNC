@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.ArrayList;
 import mindsync.model.MedicationLog;
 
-import javax.management.openmbean.InvalidOpenTypeException;
-
 public class MedicationLogDAO {
     public boolean createLog(String patientId, String prescriptionId, String date, boolean taken, String note) {
         String id = UUID.randomUUID().toString();
