@@ -65,7 +65,7 @@ public class CommunityDAO {
         }
     }
 
-    public boolean createComment(String postId,String patientId,String content, String commentId, String createdAt, boolean anonymous) {
+    public boolean createComment(String postId,String patientId,String content, String createdAt, boolean anonymous) {
         String id = UUID.randomUUID().toString();
         String sql =  "INSERT INTO communityComments(id, postId, patientId, content, createdAt,anonymous) "+
                 "VALUES (?, ?, ?, ?, ?, ?)";
