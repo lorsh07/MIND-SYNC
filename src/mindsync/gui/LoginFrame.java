@@ -9,6 +9,10 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Component;
 import javax.swing.JTextField;
+import java.awt.Dimension;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import javax.swing.Box;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
@@ -17,7 +21,6 @@ public class LoginFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
-        setVisible(true);
 
         //부품들을 담을 빈 판(패널)을 하나 만든다
         JPanel panel = new JPanel();
@@ -37,5 +40,31 @@ public class LoginFrame extends JFrame {
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         //사용자가 글자를 입력할 수 있는 한 줄짜리 입력창을 만들어서, usernameField라는 이름으로 저장한다
         JTextField usernameField = new JTextField();
+        //이 입력창이 커질 수 있는 최대 크기를, 가로 300px, 세로 35px로 제한
+        usernameField.setMaximumSize(new Dimension(300,35));
+        //비밀번호 입력창 만들기
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setMaximumSize(new Dimension(300,35));
+        //로그인 버튼 만들기
+        JButton loginButton = new JButton("로그인");
+        //버튼 배경색을 포인트 컬러로
+        loginButton.setBackground(new Color(0x1E,0x66,0x57));
+        //버튼 글자색을 흰색으로
+        loginButton.setForeground(Color.WHITE);
+        //가운데 정렬
+        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // 패널에 붙이기
+        panel.add(titleLabel);
+        panel.add(Box.createVerticalStrut(30));
+        panel.add(usernameField);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(passwordField);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(loginButton);
+        //BoxLayout.Y_AXIS라서 추가한 순서대로 위에서 아래로 쌓인다.
+        //Box.createVerticalStrut(30) — "30픽셀짜리 빈 세로 공간"을 만드는 특수한 부품
+        //제목 → 간격 → 아이디입력 → 간격 → 비밀번호입력 → 간격 → 버튼 순서
+        add(panel);
+        setVisible(true);
     }
 }
