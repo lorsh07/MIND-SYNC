@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.Box;
+import java.io.File;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
@@ -33,7 +34,7 @@ public class LoginFrame extends JFrame {
         //MIND SYNC'라는 글자를 보여주는 라벨을 하나 만들어서, titleLabel이라는 이름으로 저장한다
         JLabel titleLabel = new JLabel("MIND SYNC");
         //titleLabel의 글꼴을, '맑은 고딕' 서체로, 굵게, 크기 24로 설정해라
-        titleLabel.setFont(new Font("맑은 고딕",Font.BOLD,24));
+        titleLabel.setFont(loadFont("fonts/Pretendard-Bold.otf", 24));
         //titleLabel 의 글자색을 포인트 컬러 #1E6657 로 설정하기
         titleLabel.setForeground(new Color(0x1E,0x66,0x57));
         //titleLabel을, 가로 방향 기준으로 가운데에 놓아라.
@@ -66,5 +67,19 @@ public class LoginFrame extends JFrame {
         //제목 → 간격 → 아이디입력 → 간격 → 비밀번호입력 → 간격 → 버튼 순서
         add(panel);
         setVisible(true);
+    }
+
+    private Font loadFont(String path, float size) {
+        try{
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File(path));
+            //Font.TRUETYPE_FONT — "이 파일은 트루타입/오픈타입 계열 폰트다"라는 힌트
+            // Font.createFont(...) — 그 파일을 읽어서, 자바가 쓸 수 있는 Font 객체로 변환
+            //new File(path) — 컴퓨터 안의 실제 파일(우리가 넣은 otf 파일)을 자바에서 다루는 객체로 만듦
+            return font.deriveFont(size);
+            //deriveFont(size)는 "이 폰트를 기반으로, 크기만 이걸로 바꾼 새 버전을 만들어라"는 뜻
+        }catch (Exception e){
+            e.printStackTrace();
+            return  new Font("맑은 고딕", Font.PLAIN, (int) size);
+        }
     }
 }
