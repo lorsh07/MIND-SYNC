@@ -1,5 +1,8 @@
 package mindsync.gui;
 
+import mindsync.dao.UserDAO;
+import mindsync.model.Patient;
+
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
@@ -13,7 +16,11 @@ import java.awt.Dimension;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.Box;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import mindsync.dao.UserDAO;
+import mindsync.model.Patient;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
@@ -62,6 +69,24 @@ public class LoginFrame extends JFrame {
         panel.add(passwordField);
         panel.add(Box.createVerticalStrut(20));
         panel.add(loginButton);
+
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                //usernameField.getText() — 아이디 입력창에 지금 사용자가 입력해둔 글자를 꺼내옴. 반환 타입이 그냥 String
+                String password = new String(passwordField.getPassword());
+                //passwordField.getPassword() — 비밀번호 입력창에서 값을 꺼내는데, 이건 좀 특이하게 char[](문자 배열) 타입
+                UserDAO userDAO = new UserDAO();
+                Patient loggedInPatient = userDAO.loginPatient(username,password);
+
+                if(loggedInPatient == null) {
+                    JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공, 환영합니다, " + loggedInPatient.getName() + "님");
+                } else {
+                    JOptionPane.showMessageDialog(LoginFrame.this,"아이디 또는 비밀번호가 올바르지 않습니다.");
+                }
+            }
+        });
         //BoxLayout.Y_AXIS라서 추가한 순서대로 위에서 아래로 쌓인다.
         //Box.createVerticalStrut(30) — "30픽셀짜리 빈 세로 공간"을 만드는 특수한 부품
         //제목 → 간격 → 아이디입력 → 간격 → 비밀번호입력 → 간격 → 버튼 순서
