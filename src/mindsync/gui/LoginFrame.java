@@ -44,33 +44,67 @@ public class LoginFrame extends JFrame {
         titleLabel.setFont(loadFont("fonts/Pretendard-Bold.otf", 24));
         //titleLabel 의 글자색을 포인트 컬러 #1E6657 로 설정하기
         titleLabel.setForeground(new Color(21, 100, 90));
-        //titleLabel을, 가로 방향 기준으로 가운데에 놓아라.
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        titleLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, titleLabel.getPreferredSize().height));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel subtitleLabel = new JLabel("마음을 돌보는 가장 편안한 방법");
         subtitleLabel.setFont(loadFont("fonts/Pretendard-Regular.otf", 14));
         subtitleLabel.setForeground(new Color(0x6B,0x7A,0x76));
-        subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        subtitleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        subtitleLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, subtitleLabel.getPreferredSize().height));
+        subtitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         ImageIcon logoIcon = new ImageIcon("assets/mind-sync-mark-512.png");
         Image scaledLogo = logoIcon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
-        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        logoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        logoLabel.setMaximumSize(new Dimension(Integer.MAX_VALUE, logoLabel.getPreferredSize().height));
+        logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         //사용자가 글자를 입력할 수 있는 한 줄짜리 입력창을 만들어서, usernameField라는 이름으로 저장한다
         JTextField usernameField = new JTextField();
         //이 입력창이 커질 수 있는 최대 크기를, 가로 300px, 세로 35px로 제한
-        usernameField.setMaximumSize(new Dimension(300,35));
+        JLabel usernameLabel = new JLabel("아이디");
+        usernameLabel.setFont(loadFont("fonts/Pretendard-Bold.otf", 14));
+        usernameLabel.setForeground(new Color(0x16,0x21,0x1E));
+        usernameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        usernameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+        usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE,45));
+
+        usernameField.setAlignmentX(Component.LEFT_ALIGNMENT);
+        usernameField.setBackground(new Color(0xF7,0xF9,0xF8));
+        usernameField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(0xDC,0xE3,0xE1),1),
+                BorderFactory.createEmptyBorder(10,12,10,12)
+
+        ));
         //비밀번호 입력창 만들기
         JPasswordField passwordField = new JPasswordField();
-        passwordField.setMaximumSize(new Dimension(300,35));
+
+        JLabel passwordLabel = new JLabel("비밀번호");
+        passwordLabel.setFont(loadFont("fonts/Pretendard-Bold.otf", 14));
+        passwordLabel.setForeground(new Color(0x16,0x21,0x1E));
+        passwordLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+        passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE,45));
+
+        passwordField.setAlignmentX(Component.LEFT_ALIGNMENT);
+        passwordField.setBackground(Color.WHITE);
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(21, 100, 90),1),
+                BorderFactory.createEmptyBorder(10,12,10,12)
+        ));
         //로그인 버튼 만들기
         JButton loginButton = new JButton("로그인");
+        loginButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        loginButton.setMaximumSize(new Dimension(Integer.MAX_VALUE,45));
         //버튼 배경색을 포인트 컬러로
         loginButton.setBackground(new Color(21, 100, 90));
         //버튼 글자색을 흰색으로
         loginButton.setForeground(Color.WHITE);
-        //가운데 정렬
-        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         // 패널에 붙이기
         panel.add(logoLabel);
         panel.add(Box.createVerticalStrut(10));
@@ -78,8 +112,12 @@ public class LoginFrame extends JFrame {
         panel.add(Box.createVerticalStrut(4));
         panel.add(subtitleLabel);
         panel.add(Box.createVerticalStrut(30));
+        panel.add(usernameLabel);
+        panel.add(Box.createVerticalStrut(6));
         panel.add(usernameField);
         panel.add(Box.createVerticalStrut(10));
+        panel.add(passwordLabel);
+        panel.add(Box.createVerticalStrut(6));
         panel.add(passwordField);
         panel.add(Box.createVerticalStrut(20));
         panel.add(loginButton);
@@ -94,10 +132,10 @@ public class LoginFrame extends JFrame {
                 UserDAO userDAO = new UserDAO();
                 Patient loggedInPatient = userDAO.loginPatient(username,password);
 
-                if(loggedInPatient == null) {
-                    JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공, 환영합니다, " + loggedInPatient.getName() + "님");
+                if (loggedInPatient != null) {
+                    JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공! 환영합니다, " + loggedInPatient.getName() + "님");
                 } else {
-                    JOptionPane.showMessageDialog(LoginFrame.this,"아이디 또는 비밀번호가 올바르지 않습니다.");
+                    JOptionPane.showMessageDialog(LoginFrame.this, "아이디 또는 비밀번호가 올바르지 않습니다.");
                 }
             }
         });
