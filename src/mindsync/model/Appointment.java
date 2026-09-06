@@ -7,14 +7,18 @@ public class Appointment {
    private String symptom;
    private String status;
    private String doctorNotes;
+   private String meetingLink;
+   private String consultationType;
 
-    public Appointment(String id, String patientId, String doctorId, String symptom) {
+    public Appointment(String id, String patientId, String doctorId, String symptom, String consultationType) {
         this.id = id;
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.symptom = symptom;
         this.status = "요청";
         this.doctorNotes = "";
+        this.consultationType = consultationType;
+        this.meetingLink = "";
     }
 
     public String getId() {
@@ -52,5 +56,17 @@ public class Appointment {
     }
     public void setDoctorNotes(String doctorNotes) {
         this.doctorNotes = doctorNotes;
+    }
+    public String getConsultationType() {
+        return consultationType;
+    }
+    public void setConsultationType(String consultationType) {
+        this.consultationType = consultationType;
+    }
+    public String getMeetingLink() {
+        return meetingLink;
+    }
+    public void setMeetingLink(String meetingLink) {
+        this.meetingLink = meetingLink;
     }
 }

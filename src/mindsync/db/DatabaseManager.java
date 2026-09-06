@@ -77,6 +77,16 @@ public class DatabaseManager {
              Statement stmt = conn.createStatement()) {
             stmt.execute(userSql);
             stmt.execute(appointmentSql);
+            try {
+                stmt.execute("ALTER TABLE appointments ADD COLUMN consultationType TEXT");
+            } catch (SQLException e) {
+
+            }
+            try {
+                stmt.execute("ALTER TABLE appointments ADD COLUMN meetingLink TEXT");
+            } catch (SQLException e) {
+
+            }
             stmt.execute(prescriptionSql);
             stmt.execute(medicationLogSql);
             stmt.execute(selfDiagnosisResultSql);
