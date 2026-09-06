@@ -43,9 +43,19 @@ public class LoginFrame extends JFrame {
         //titleLabel의 글꼴을, '맑은 고딕' 서체로, 굵게, 크기 24로 설정해라
         titleLabel.setFont(loadFont("fonts/Pretendard-Bold.otf", 24));
         //titleLabel 의 글자색을 포인트 컬러 #1E6657 로 설정하기
-        titleLabel.setForeground(new Color(0x1E,0x66,0x57));
+        titleLabel.setForeground(new Color(21, 100, 90));
         //titleLabel을, 가로 방향 기준으로 가운데에 놓아라.
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel subtitleLabel = new JLabel("마음을 돌보는 가장 편안한 방법");
+        subtitleLabel.setFont(loadFont("fonts/Pretendard-Regular.otf", 14));
+        subtitleLabel.setForeground(new Color(0x6B,0x7A,0x76));
+        subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        ImageIcon logoIcon = new ImageIcon("assets/mind-sync-mark-512.png");
+        Image scaledLogo = logoIcon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         //사용자가 글자를 입력할 수 있는 한 줄짜리 입력창을 만들어서, usernameField라는 이름으로 저장한다
         JTextField usernameField = new JTextField();
         //이 입력창이 커질 수 있는 최대 크기를, 가로 300px, 세로 35px로 제한
@@ -56,13 +66,17 @@ public class LoginFrame extends JFrame {
         //로그인 버튼 만들기
         JButton loginButton = new JButton("로그인");
         //버튼 배경색을 포인트 컬러로
-        loginButton.setBackground(new Color(0x1E,0x66,0x57));
+        loginButton.setBackground(new Color(21, 100, 90));
         //버튼 글자색을 흰색으로
         loginButton.setForeground(Color.WHITE);
         //가운데 정렬
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         // 패널에 붙이기
+        panel.add(logoLabel);
+        panel.add(Box.createVerticalStrut(10));
         panel.add(titleLabel);
+        panel.add(Box.createVerticalStrut(4));
+        panel.add(subtitleLabel);
         panel.add(Box.createVerticalStrut(30));
         panel.add(usernameField);
         panel.add(Box.createVerticalStrut(10));

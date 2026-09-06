@@ -1,0 +1,32 @@
+<component name="libraryTable">
+  <library name="FlatLaf-3.7.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/buildSrc/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-core/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-core/src/main/java9" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-core/src/test/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-demo/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-extras/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-fonts/flatlaf-fonts-inter/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-fonts/flatlaf-fonts-inter/src/test/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-fonts/flatlaf-fonts-jetbrains-mono/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-fonts/flatlaf-fonts-jetbrains-mono/src/test/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-fonts/flatlaf-fonts-roboto-mono/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-fonts/flatlaf-fonts-roboto-mono/src/test/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-fonts/flatlaf-fonts-roboto/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-fonts/flatlaf-fonts-roboto/src/test/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-intellij-themes/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-jide-oss/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-natives/flatlaf-natives-jna/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-swingx/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-testing/flatlaf-testing-modular-app/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-testing/src/main/java" />
+      <root url="jar://$PROJECT_DIR$/lib/FlatLaf-3.7.2.zip!/FlatLaf-3.7.2/flatlaf-theme-editor/src/main/java" />
+    </SOURCES>
+  </library>
+</component>
