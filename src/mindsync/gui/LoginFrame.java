@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import mindsync.dao.UserDAO;
 import mindsync.model.Patient;
+import java.awt.FlowLayout;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
@@ -105,6 +106,23 @@ public class LoginFrame extends JFrame {
         loginButton.setBackground(new Color(21, 100, 90));
         //버튼 글자색을 흰색으로
         loginButton.setForeground(Color.WHITE);
+
+        JPanel signupPanel = new JPanel();
+        signupPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 4, 0));
+        signupPanel.setBackground(Color.WHITE);
+        signupPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        signupPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
+
+        JLabel askLabel = new JLabel("처음이신가요?");
+        askLabel.setFont(loadFont("fonts/Pretendard-Regular.otf", 14));
+        askLabel.setForeground(new Color(0x6B, 0x7A, 0x76));
+
+        JLabel signupLabel = new JLabel("회원가입");
+        signupLabel.setFont(loadFont("fonts/Pretendard-Bold.otf", 14));
+        signupLabel.setForeground(new Color(21, 100, 90));
+
+        signupPanel.add(askLabel);
+        signupPanel.add(signupLabel);
         // 패널에 붙이기
         panel.add(logoLabel);
         panel.add(Box.createVerticalStrut(10));
@@ -121,6 +139,8 @@ public class LoginFrame extends JFrame {
         panel.add(passwordField);
         panel.add(Box.createVerticalStrut(20));
         panel.add(loginButton);
+        panel.add(Box.createVerticalStrut(16));
+        panel.add(signupPanel);
 
         loginButton.addActionListener(new ActionListener() {
             @Override
