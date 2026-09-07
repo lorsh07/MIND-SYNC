@@ -42,9 +42,38 @@ public class RegisterFrame extends JFrame {
         rolePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         rolePanel.add(patientRadio);
         rolePanel.add(doctorRadio);
+
+        JLabel usernameLabel = createFieldLabel("아이디");
+        JTextField usernameField = createStyledField();
+
+        JLabel passwordLabel = createFieldLabel("비밀번호");
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setAlignmentX(Component.LEFT_ALIGNMENT);
+        passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        passwordField.setBackground(new Color(0xF7, 0xF9, 0xF8));
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(0xDC, 0xE3, 0xE1), 1),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+
+        JLabel nameLabel = createFieldLabel("이름");
+        JTextField nameField = createStyledField();
+
         panel.add(titleLabel);
         panel.add(Box.createVerticalStrut(20));
         panel.add(rolePanel);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(usernameLabel);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(usernameField);
+        panel.add(Box.createVerticalStrut(14));
+        panel.add(passwordLabel);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(passwordField);
+        panel.add(Box.createVerticalStrut(14));
+        panel.add(nameLabel);
+        panel.add(Box.createVerticalStrut(6));
+        panel.add(nameField);
         panel.add(Box.createVerticalStrut(20));
         add(panel);
 
@@ -58,6 +87,25 @@ public class RegisterFrame extends JFrame {
             e.printStackTrace();
             return new Font("맑은 고딕", Font.PLAIN, (int) size);
         }
+    }
+    private JTextField createStyledField() {
+        JTextField field = new JTextField();
+        field.setAlignmentX(Component.LEFT_ALIGNMENT);
+        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        field.setBackground(new Color(0xF7, 0xF9, 0xF8));
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(0xDC, 0xE3, 0xE1), 1),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+        return field;
+    }
+
+    private JLabel createFieldLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(loadFont("fonts/Pretendard-Bold.otf", 13));
+        label.setForeground(new Color(0x16, 0x21, 0x1E));
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return label;
     }
 
 
