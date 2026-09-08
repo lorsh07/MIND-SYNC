@@ -1,5 +1,9 @@
 package mindsync.gui;
 
+import mindsync.dao.UserDAO;
+import mindsync.model.Doctor;
+import mindsync.model.Patient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +15,9 @@ import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.UUID;
 import javax.swing.JScrollPane;
+
 
 public class RegisterFrame extends JFrame {
 //RegisterFrame은 로그인 화면에서 잠깐 열리는 보조 창이에요
@@ -70,6 +76,7 @@ public class RegisterFrame extends JFrame {
         registerButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         registerButton.setBackground(new Color(21, 100, 90));
         registerButton.setForeground(Color.white);
+        registerButton.setFont(loadFont("fonts/Pretendard-Bold.otf", 15));
 
         JPanel patientCard = new JPanel();
         patientCard.setLayout(new BoxLayout(patientCard, BoxLayout.Y_AXIS));
@@ -94,6 +101,37 @@ public class RegisterFrame extends JFrame {
 
         JLabel hospitalRegionLabel = createFieldLabel("소속 병원 지역");
         JTextField hospitalRegionField = createStyledField();
+
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String id = UUID.randomUUID().toString();
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+                String name = nameField.getText();
+
+                UserDAO userDAO = new UserDAO();
+                boolean success;
+
+                if (patientRadio.isSelected()) {
+                    String region = regionField.getText();
+                    Patient newPatient = new Patient(id, username, password, name, region);
+                    success = userDAO.registerPatient(newPatient);
+                }else {
+                    String hospitalRegion = hospitalRegionField.getText();
+                    String licence = licenseField.getText();
+                    String specialty = specialtyField.getText();
+                    Doctor newDoctor = new Doctor(id, username, password, name, hospitalRegion, licence, specialty);
+                    success = userDAO.registerDoctor(newDoctor);
+                }
+                if (success) {
+                    JOptionPane.showMessageDialog(RegisterFrame.this,"회원가입이 완료되었습니다!");
+                    dispose();
+                }else {
+                    JOptionPane.showMessageDialog(RegisterFrame.this,"회원가입에 실패했습니다. 다시 시도해주세요");
+                }
+            }
+        });
 
         doctorCard.add(hospitalRegionLabel);
         doctorCard.add(Box.createVerticalStrut(6));
