@@ -2,10 +2,16 @@ package mindsync.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.FlowLayout;
+import java.awt.CardLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class RegisterFrame extends JFrame {
 //RegisterFrame은 로그인 화면에서 잠깐 열리는 보조 창이에요
@@ -59,6 +65,74 @@ public class RegisterFrame extends JFrame {
         JLabel nameLabel = createFieldLabel("이름");
         JTextField nameField = createStyledField();
 
+        JButton registerButton = new JButton("가입하기");
+        registerButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        registerButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
+        registerButton.setBackground(new Color(21, 100, 90));
+        registerButton.setForeground(Color.white);
+
+        JPanel patientCard = new JPanel();
+        patientCard.setLayout(new BoxLayout(patientCard, BoxLayout.Y_AXIS));
+        patientCard.setBackground(Color.WHITE);
+
+        JLabel regionLabel = createFieldLabel("거주 지역");
+        JTextField regionField = createStyledField();
+
+        patientCard.add(regionLabel);
+        patientCard.add(Box.createVerticalStrut(6));
+        patientCard.add(regionField);
+
+        JPanel doctorCard = new JPanel();
+        doctorCard.setLayout(new BoxLayout(doctorCard, BoxLayout.Y_AXIS));
+        doctorCard.setBackground(Color.WHITE);
+
+        JLabel specialtyLabel = createFieldLabel("전문 분야");
+        JTextField specialtyField = createStyledField();
+
+        JLabel licenseLabel = createFieldLabel("면허 번호");
+        JTextField licenseField = createStyledField();
+
+        JLabel hospitalRegionLabel = createFieldLabel("소속 병원 지역");
+        JTextField hospitalRegionField = createStyledField();
+
+        doctorCard.add(hospitalRegionLabel);
+        doctorCard.add(Box.createVerticalStrut(6));
+        doctorCard.add(hospitalRegionField);
+        doctorCard.add(Box.createVerticalStrut(14));
+        doctorCard.add(licenseLabel);
+        doctorCard.add(Box.createVerticalStrut(6));
+        doctorCard.add(licenseField);
+        doctorCard.add(Box.createVerticalStrut(14));
+        doctorCard.add(specialtyLabel);
+        doctorCard.add(Box.createVerticalStrut(6));
+        doctorCard.add(specialtyField);
+
+        CardLayout cardLayout = new CardLayout();
+        //CardLayout cardLayout = new CardLayout(); — 카드를 관리하는 레이아웃 매니저를 만들어요
+        JPanel cardContainer = new JPanel(cardLayout);
+        //JPanel cardContainer = new JPanel(cardLayout); — 이 카드들을 담을 새로운 패널을 만들면서, 레이아웃을 CardLayout으로 지정
+        cardContainer.setBackground(Color.WHITE);
+        cardContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
+        cardContainer.setMaximumSize(new Dimension(Integer.MAX_VALUE, 260));
+
+        cardContainer.add(patientCard,"PATIENT");
+        cardContainer.add(doctorCard,"DOCTOR");
+        //일반 add(부품)이 아니라, add(부품, 이름표)처럼 이름표(문자열)를 같이 붙여서 추가해요. 이 이름표로 나중에 "어떤 카드를 보여줄지" 지정할 수 있어요.
+
+        patientRadio.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cardContainer,"PATIENT");
+            }
+        });
+
+        doctorRadio.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cardContainer,"DOCTOR");
+            }
+        });
+
         panel.add(titleLabel);
         panel.add(Box.createVerticalStrut(20));
         panel.add(rolePanel);
@@ -75,7 +149,13 @@ public class RegisterFrame extends JFrame {
         panel.add(Box.createVerticalStrut(6));
         panel.add(nameField);
         panel.add(Box.createVerticalStrut(20));
-        add(panel);
+        panel.add(cardContainer);
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(registerButton);
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(scrollPane);
 
         setVisible(true);
     }
