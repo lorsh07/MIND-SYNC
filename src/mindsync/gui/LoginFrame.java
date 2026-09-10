@@ -24,12 +24,13 @@ import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import mindsync.gui.PatientDashboardFrame;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
         setTitle("MIND SYNC - 로그인");
         setSize(400,500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
 
@@ -164,8 +165,8 @@ public class LoginFrame extends JFrame {
 
                 if (loggedInPatient != null) {
                     JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공! 환영합니다, " + loggedInPatient.getName() + "님");
-                } else {
-                    JOptionPane.showMessageDialog(LoginFrame.this, "아이디 또는 비밀번호가 올바르지 않습니다.");
+                    new PatientDashboardFrame(loggedInPatient.getName());
+                    dispose();
                 }
             }
         });
