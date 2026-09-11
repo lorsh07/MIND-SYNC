@@ -107,6 +107,80 @@ public class PatientDashboardFrame extends JFrame {
             contentPanel.add(kpiRow);
             contentPanel.add(Box.createVerticalStrut(18));
 
+            RoundedPanel moodCard = new RoundedPanel(12);
+            //"기분 추이" 전체를 담을 큰 카드예요. KPI 카드랑 똑같이 RoundedPanel(둥근 모서리, 반경 12px)을 재사용해요.
+            moodCard.setLayout(new BoxLayout(moodCard, BoxLayout.Y_AXIS));
+            //이 카드 안에는 "제목 줄"과 "막대그래프 줄"이 위아래로 쌓일 거라서, 세로 방향 BoxLayout을 씁니다.
+            moodCard.setBackground(Color.WHITE);
+            //배경은 흰색 (스펙에 나온 카드 배경색)
+            moodCard.setBorder(BorderFactory.createEmptyBorder(18,18,18,18));
+            //카드 안쪽 여백을 18px씩
+            moodCard.setAlignmentX(Component.LEFT_ALIGNMENT);
+            //왼쪽 정렬로 통일
+            moodCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 220));
+            //너비는 화면 전체로 늘어나도 되지만, 높이는 220px로 제한
+
+            JPanel moodHeaderRow = new JPanel();
+            //"기분 추이" 제목 줄만 담을 작은 패널
+            moodHeaderRow.setLayout(new BorderLayout());
+            //이 작은 패널 안에서 "왼쪽 끝"과 "오른쪽 끝"으로 글자를 벌리는 용도
+            moodHeaderRow.setBackground(Color.WHITE);
+            //카드 배경과 똑같이 흰색
+            moodHeaderRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+            //이 패널도 왼쪽 정렬
+            moodHeaderRow.setMaximumSize(new Dimension(Integer.MAX_VALUE,24));
+            //너비는 카드 전체, 높이는 글자 한 줄 정도(24px)로 제한
+
+            JLabel moodTitleLabel = new JLabel("기분 추이");
+            moodTitleLabel.setFont(loadFont("fonts/Pretendard-Bold.otf", 15));
+            moodTitleLabel.setForeground(new Color(0x16, 0x21, 0x1E));
+            //"기분 추이" 글자 라벨을 만들고, 스펙대로 15px Bold, 진한 색
+
+            JLabel moodPeriodLabel = new JLabel("최근 8주");
+            moodTitleLabel.setFont(loadFont("fonts/Pretendard-Regular.otf", 12));
+            moodTitleLabel.setForeground(new Color(0x8A,0x99,0x95));
+            //"최근 8주" 글자 라벨을 만들고, 12px Regular, 연한 회색
+
+            moodHeaderRow.add(moodTitleLabel, BorderLayout.WEST);
+            //제목을 왼쪽(WEST) 끝에 배치
+            moodHeaderRow.add(moodPeriodLabel, BorderLayout.EAST);
+            //기간 글자를 오른쪽(EAST) 끝에 배치
+
+            JPanel barsRow = new JPanel();
+            //8개 막대를 나란히 담을 줄
+            barsRow.setLayout(new GridLayout(1, 8, 9, 0));
+            //1줄, 8칸"으로 나눠서 막대 8개를 정확히 같은 너비로 배치해요. 칸 사이 간격은 9px
+            barsRow.setBackground(Color.WHITE);
+            barsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            int[] moodValues = {38, 52, 44, 66, 58, 78, 72, 90};
+
+            for (int i = 0; i < moodValues.length; i++) {
+                boolean isLast = (i == moodValues.length - 1);
+                //지금 i가 배열의 마지막 인덱스(7)와 같은가?"를 확인해요. 마지막 반복일 때만 true가 돼요 — 이게 "최신 막대만 진한 색"을 판단하는 조건
+                RoundedPanel bar = createBar(moodValues[i], isLast);
+
+                JPanel barWrapper = new JPanel();
+                //막대 하나하나를 감싸는 작은 상자
+                barWrapper.setLayout(new BorderLayout());
+                barWrapper.setBackground(Color.WHITE);
+                barWrapper.add(bar, BorderLayout.SOUTH);
+                //실제 그래프처럼 "바닥에서부터 자라는" 느낌을 주려면, 각 막대를 BorderLayout.SOUTH(아래쪽)에 붙여서, 짧은 막대는 위에 빈 공간이 남고 긴 막대는 꽉 채우도록 만들어요.
+
+                barsRow.add(barWrapper);
+            }
+            moodCard.add(moodHeaderRow);
+            //"기분 추이 / 최근 8주" 제목 줄을 카드 맨 위에 쌓아요.
+            moodCard.add(Box.createVerticalStrut(14));
+            //제목 줄과 막대그래프 사이에 14px 간격을 둬요
+            moodCard.add(barsRow);
+            //막대 8개가 담긴 줄을 그 아래에 쌓아요.
+
+            contentPanel.add(moodCard);
+            //이렇게 완성된 "기분 추이" 카드 전체를, 아까 KPI 카드들 아래에 이어서 contentPanel에 쌓아요.
+            contentPanel.add(Box.createVerticalStrut(18));
+            //다음에 올 요소(복약 배너)와의 간격을 미리 18px 확보
+
             add(contentPanel, BorderLayout.CENTER);
 
             setResizable(true);
@@ -158,6 +232,20 @@ public class PatientDashboardFrame extends JFrame {
         card.add(captionText);
 
         return card;
+    }
+
+    private RoundedPanel createBar(int heightPercent, boolean isLatest) {
+            RoundedPanel bar = new RoundedPanel(5);
+            if(isLatest) {
+                bar.setBackground(new Color(21,100,90));
+            }else {
+                bar.setBackground(new Color(0xD9, 0xE7, 0xE2));
+            }
+            //이게 최신 막대면(isLatest가 true면) → 진한 포인트컬러(
+        //#15645A)로 칠해라. 아니면(else) → 연한 회녹색(
+        //#D9E7E2)으로 칠해라
+            bar.setPreferredSize(new Dimension(20, heightPercent));
+            return bar;
     }
 
         }
