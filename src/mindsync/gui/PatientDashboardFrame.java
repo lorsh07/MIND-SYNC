@@ -181,6 +181,29 @@ public class PatientDashboardFrame extends JFrame {
             contentPanel.add(Box.createVerticalStrut(18));
             //다음에 올 요소(복약 배너)와의 간격을 미리 18px 확보
 
+            RoundedPanel medicationBanner =  new RoundedPanel(12);
+            medicationBanner.setLayout(new BorderLayout());
+            medicationBanner.setBackground(Color.WHITE);
+            medicationBanner.setBorder(BorderFactory.createEmptyBorder(14,18,14,18));
+            medicationBanner.setAlignmentX(Component.LEFT_ALIGNMENT);
+            medicationBanner.setMaximumSize(new Dimension(Integer.MAX_VALUE,60));
+
+            JLabel medicationText = new JLabel("오늘 저녁 8시 · 세르트랄린 50mg");
+            medicationText.setFont(loadFont("fonts/Pretendard-Regular.otf", 14));
+            medicationText.setForeground(new Color(0x4C,0x5A,0x56));
+
+            JLabel checkButton = new JLabel("복용 체크");
+            checkButton.setFont(loadFont("fonts/Pretendard-Bold.otf", 13));
+            checkButton.setForeground(Color.white);
+            checkButton.setOpaque(true);
+            checkButton.setBackground(new Color(21,100,90));
+            checkButton.setBorder(BorderFactory.createEmptyBorder(9,14,9,14));
+
+            medicationBanner.add(medicationText, BorderLayout.WEST);
+            medicationBanner.add(checkButton, BorderLayout.EAST);
+
+            contentPanel.add(medicationBanner);
+
             add(contentPanel, BorderLayout.CENTER);
 
             setResizable(true);
