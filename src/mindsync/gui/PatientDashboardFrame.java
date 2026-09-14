@@ -1,20 +1,82 @@
 package mindsync.gui;
 
+import mindsync.dao.AppointmentDAO;
+import mindsync.dao.MedicationLogDAO;
 import mindsync.db.DatabaseManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.awt.GridLayout;
+import mindsync.dao.SelfDiagnosisDAO;
+import mindsync.model.Appointment;
+import mindsync.model.MedicationLog;
+import mindsync.model.SelfDiagnosisResult;
+import java.util.List;
+
 
 
 public class PatientDashboardFrame extends JFrame {
 
-        public PatientDashboardFrame(String patientName) {
+        public PatientDashboardFrame(String patientId,String patientName) {
+            
             setTitle("MIND SYNC - 대시보드");
             setSize(1280,800);
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             setLocationRelativeTo(null);
+
+            SelfDiagnosisDAO selfDiagnosisDAO = new SelfDiagnosisDAO();
+            List<SelfDiagnosisResult> diagnosisResults = selfDiagnosisDAO.getLogsByPatientId(patientId);
+
+            String phqScore = "-";
+            String phqCaption = "기록 없음";
+
+            if (!diagnosisResults.isEmpty()) {
+                SelfDiagnosisResult latest = diagnosisResults.get(diagnosisResults.size() - 1);
+                phqScore = latest.getTotalScore() + "점";
+                phqCaption = latest.getInterpretation();
+            }
+
+            MedicationLogDAO medicationLogDAO = new MedicationLogDAO();
+            List<MedicationLog> medicationLogs = medicationLogDAO.getLogsByPatientId(patientId);
+            //— 그 환자의 모든 투약 기록을 리스트로 가져와요.
+
+            String adherenceValue = "-";
+            String adherenceCaption = "기록 없음";
+
+            if (!medicationLogs.isEmpty()) {
+                int takenCount = 0;
+                //"복용한 날 수"를 셀 변수를 0부터 시작
+                for(int i = 0; i < medicationLogs.size(); i++) {
+                    //리스트에 있는 기록들을 처음부터 끝까지 하나씩 훑어봐요.
+                    if(medicationLogs.get(i).isTaken()) {
+                        //i번째 기록을 꺼내서, isTaken()(복용했는지 여부, boolean)이 true인지 확인
+                        takenCount = takenCount + 1;
+                        //복용한 기록이면, 카운터를 1 늘려요. 이 반복문이 다 끝나면 takenCount에는 "총 몇 번 복용했는지"가 담겨요.
+                    }
+                }
+                int percentage = (takenCount * 100) / medicationLogs.size();
+                //비율 계산
+                adherenceValue = percentage + "%";
+                adherenceCaption = "최근 30일";
+            }
+
+            AppointmentDAO appointmentDAO = new AppointmentDAO();
+            Appointment nextAppointment = appointmentDAO.getNextAppointmentByPatientId(patientId);
+            //가장 가까운 예정된 진료를 가져와요.
+
+            String nextAppDate = "-";
+            String nextAppCaption = "예정된 진료 없음";
+
+            if (nextAppointment != null) {
+                //예정된 진료가 있을 때만 아래 코드를 실행해요.
+                String[] parts  = nextAppointment.getScheduledAt().split(" ");
+                //저장된 문자열을 가져오고, 띄어쓰기를 기준으로 잘라서 2개짜리 배열을 만들어줘요.
+                nextAppDate = parts[0];
+                //날짜
+                nextAppCaption = parts[1];
+                //시간
+            }
 
             JPanel sidebar = new JPanel();
             sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
@@ -69,9 +131,9 @@ public class PatientDashboardFrame extends JFrame {
             sidebar.add(myPageMenu);
             add(sidebar, BorderLayout.WEST);
 
-            RoundedPanel phqCard = createKpiCard("PHQ-9", "8점", "경증", new Color(21,100,90));
-            RoundedPanel adherenceCard = createKpiCard("복약 순응도", "92%", "최근 30일", new Color(0x8A,0x99,0x95));
-            RoundedPanel nextAppointmentCard = createKpiCard("다음 진료","9.12","오후 3:00", new Color(0x8A,0x99,0x95));
+            RoundedPanel phqCard = createKpiCard("PHQ-9", phqScore, phqCaption, new Color(21,100,90));
+            RoundedPanel adherenceCard = createKpiCard("복약 순응도", adherenceValue, adherenceCaption, new Color(0x8A,0x99,0x95));
+            RoundedPanel nextAppointmentCard = createKpiCard("다음 진료",nextAppDate,nextAppCaption, new Color(0x8A,0x99,0x95));
 
             JPanel kpiRow = new JPanel();
             kpiRow.setLayout(new GridLayout(1,3,12,0));

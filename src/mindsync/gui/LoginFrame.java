@@ -1,5 +1,6 @@
 package mindsync.gui;
 
+import mindsync.dao.SelfDiagnosisDAO;
 import mindsync.dao.UserDAO;
 import mindsync.model.Patient;
 
@@ -24,7 +25,10 @@ import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.util.List;;
+
 import mindsync.gui.PatientDashboardFrame;
+import mindsync.model.SelfDiagnosisResult;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
@@ -165,7 +169,7 @@ public class LoginFrame extends JFrame {
 
                 if (loggedInPatient != null) {
                     JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공! 환영합니다, " + loggedInPatient.getName() + "님");
-                    new PatientDashboardFrame(loggedInPatient.getName());
+                    new PatientDashboardFrame(loggedInPatient.getId(),loggedInPatient.getName());
                     dispose();
                 }
             }

@@ -87,6 +87,10 @@ public class DatabaseManager {
             } catch (SQLException e) {
 
             }
+            try {
+                stmt.execute("ALTER TABLE appointments ADD COLUMN scheduledAt TEXT");
+            } catch (SQLException e) {
+            }
             stmt.execute(prescriptionSql);
             stmt.execute(medicationLogSql);
             stmt.execute(selfDiagnosisResultSql);

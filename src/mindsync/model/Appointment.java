@@ -9,6 +9,7 @@ public class Appointment {
    private String doctorNotes;
    private String meetingLink;
    private String consultationType;
+   private String scheduledAt;
 
     public Appointment(String id, String patientId, String doctorId, String symptom, String consultationType) {
         this.id = id;
@@ -19,6 +20,7 @@ public class Appointment {
         this.doctorNotes = "";
         this.consultationType = consultationType;
         this.meetingLink = "";
+        this.scheduledAt = "";
     }
 
     public String getId() {
@@ -68,5 +70,11 @@ public class Appointment {
     }
     public void setMeetingLink(String meetingLink) {
         this.meetingLink = meetingLink;
+    }
+    public String getScheduledAt() {
+        return scheduledAt;
+    }
+    public void setScheduledAt(String scheduledAt) {
+        this.scheduledAt = scheduledAt;
     }
 }

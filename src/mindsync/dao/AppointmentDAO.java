@@ -103,4 +103,35 @@ public class AppointmentDAO {
             return null;
         }
     }
+    public Appointment getNextAppointmentByPatientId(String patientId) {
+        String sql = "SELECT * FROM appointments WHERE patientId = ? AND scheduledAt != '' ORDER BY scheduledAt ASC LIMIT 1";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, patientId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Appointment a = new Appointment(
+                        rs.getString("id"),
+                        rs.getString("patientId"),
+                        rs.getString("doctorId"),
+                        rs.getString("symptom"),
+                        rs.getString("consultationType")
+                );
+                a.setStatus(rs.getString("status"));
+                a.setDoctorNotes(rs.getString("doctorNotes"));
+                a.setMeetingLink(rs.getString("meetingLink"));
+                a.setScheduledAt(rs.getString("scheduledAt"));
+                return a;
+            } else {
+                return null;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
