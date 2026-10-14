@@ -46,7 +46,50 @@ public class SelfDiagnosisFrame extends JFrame {
         progressChip.setBorder(BorderFactory.createEmptyBorder(8,12,8,12));
         headerRow.add(progressChip,BorderLayout.EAST);
 
+        RoundedPanel progressTrack = new RoundedPanel(3);
+        RoundedPanel progressFill = new RoundedPanel(3);
+        progressFill.setBackground(new Color(0x15, 0x64, 0x5A));
+        progressTrack.setBackground(new Color(0xEE, 0xF2, 0xF1));
+        progressTrack.setLayout(new BorderLayout());
+        progressTrack.setAlignmentX(Component.LEFT_ALIGNMENT);
+        progressTrack.setPreferredSize(new Dimension(100,6));
+        progressTrack.setMaximumSize(new Dimension(Integer.MAX_VALUE,6));
+        progressFill.setPreferredSize(new Dimension(200,6));
+        progressTrack.add(progressFill,BorderLayout.WEST);
+
+
+        RoundedPanel questionCard = new RoundedPanel(12);
+        questionCard.setLayout(new BoxLayout(questionCard, BoxLayout.Y_AXIS));
+        questionCard.setBackground(new Color(0xF7, 0xF9, 0xF8));
+        questionCard.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(0xE3,0xE8,0xE6), 1),
+                BorderFactory.createEmptyBorder(22,22,22,22)
+        ));
+        JLabel questionCardLabel1 = new JLabel("질문 4");
+        questionCardLabel1.setFont(loadFont("fonts/Pretendard-Bold.otf",13));
+        questionCardLabel1.setForeground(new Color(0x8A, 0x99, 0x95));
+
+        JLabel questionCardLabel2 = new JLabel("지난 2주간, 피곤하다고 느끼거나 기운이 없었던 날이 얼마나 되나요?");
+        questionCardLabel2.setFont(loadFont("fonts/Pretendard-Bold.otf",19));
+        questionCardLabel2.setForeground(new Color(0x16, 0x21, 0x1E));
+
+        questionCard.setAlignmentX(Component.LEFT_ALIGNMENT);
+        questionCardLabel1.setAlignmentX(Component.LEFT_ALIGNMENT);
+        questionCardLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
+
         mainCard.add(headerRow);
+        mainCard.add(Box.createVerticalStrut(18));
+
+        mainCard.add(progressTrack);
+        mainCard.add(Box.createVerticalStrut(18));
+
+        questionCard.add(questionCardLabel1);
+        questionCard.add(Box.createVerticalStrut(16));
+        questionCard.add(questionCardLabel2);
+
+        mainCard.add(questionCard);
         mainCard.add(Box.createVerticalStrut(18));
         add(mainCard);
         setVisible(true);
