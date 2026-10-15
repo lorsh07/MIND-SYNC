@@ -59,6 +59,8 @@ public class SelfDiagnosisFrame extends JFrame {
 
 
         RoundedPanel questionCard = new RoundedPanel(12);
+        questionCard.setAlignmentX(Component.LEFT_ALIGNMENT);
+        questionCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         questionCard.setLayout(new BoxLayout(questionCard, BoxLayout.Y_AXIS));
         questionCard.setBackground(new Color(0xF7, 0xF9, 0xF8));
         questionCard.setBorder(BorderFactory.createCompoundBorder(
@@ -73,11 +75,13 @@ public class SelfDiagnosisFrame extends JFrame {
         questionCardLabel2.setFont(loadFont("fonts/Pretendard-Bold.otf",19));
         questionCardLabel2.setForeground(new Color(0x16, 0x21, 0x1E));
 
-        questionCard.setAlignmentX(Component.LEFT_ALIGNMENT);
         questionCardLabel1.setAlignmentX(Component.LEFT_ALIGNMENT);
+        questionCardLabel1.setMaximumSize(new Dimension(Integer.MAX_VALUE, questionCardLabel1.getPreferredSize().height));
+        questionCardLabel1.setHorizontalAlignment(SwingConstants.LEFT);
+
         questionCardLabel2.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-
+        questionCardLabel2.setMaximumSize(new Dimension(Integer.MAX_VALUE, questionCardLabel2.getPreferredSize().height));
+        questionCardLabel2.setHorizontalAlignment(SwingConstants.LEFT);
 
         mainCard.add(headerRow);
         mainCard.add(Box.createVerticalStrut(18));
@@ -88,6 +92,15 @@ public class SelfDiagnosisFrame extends JFrame {
         questionCard.add(questionCardLabel1);
         questionCard.add(Box.createVerticalStrut(16));
         questionCard.add(questionCardLabel2);
+
+        questionCard.add(Box.createVerticalStrut(16));
+        questionCard.add(createOption("전혀 없었다", false));
+        questionCard.add(Box.createVerticalStrut(10));
+        questionCard.add(createOption("며칠 정도", false));
+        questionCard.add(Box.createVerticalStrut(10));
+        questionCard.add(createOption("일주일 이상", true));
+        questionCard.add(Box.createVerticalStrut(10));
+        questionCard.add(createOption("거의 매일", false));
 
         mainCard.add(questionCard);
         mainCard.add(Box.createVerticalStrut(18));
@@ -103,5 +116,35 @@ public class SelfDiagnosisFrame extends JFrame {
             e.printStackTrace();
             return new Font("맑은 고딕", Font.PLAIN, (int) size);
         }
+    }
+
+    private RoundedPanel createOption(String text, boolean selected) {
+        RoundedPanel option = new RoundedPanel(10);
+        option.setLayout(new BorderLayout());
+        option.setMaximumSize(new Dimension(Integer.MAX_VALUE,50));
+        JLabel label = new JLabel(text);
+
+        if (selected) {
+            option.setBackground(new Color(0x15, 0x64, 0x5A));
+            option.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(0x15, 0x64, 0x5A),1),
+                    BorderFactory.createEmptyBorder(14,16,14,16)
+
+
+            ));
+            label.setForeground(Color.white);
+            label.setFont(loadFont("fonts/Pretendard-Bold.otf",15));
+        } else {
+            option.setBackground(Color.white);
+            option.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(0xDC, 0xE3, 0xE1),1),
+                    BorderFactory.createEmptyBorder(14,16,14,16)
+
+            ));
+            label.setForeground(new Color(0x4C, 0x5A, 0x56));
+            label.setFont(loadFont("fonts/Pretendard-Regular.otf",15));
+        }
+        option.add(label,BorderLayout.WEST);
+        return option;
     }
 }
