@@ -1,5 +1,7 @@
 package mindsync.gui;
 
+import mindsync.dao.SelfDiagnosisDAO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -167,6 +169,25 @@ public class SelfDiagnosisFrame extends JFrame {
                 }
             }
         });
+        nextButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (answers[currentIndex] == -1) return;
+                if (currentIndex < 8) {
+                    currentIndex++;
+                    showQuestion();
+                }else{
+                    int total = 0;
+                    for(int a : answers) total += a;
+                    String result = interpret(total);
+                    new SelfDiagnosisDAO().createResult(patientId,"PHQ-9",
+                            java.time.LocalDate.now().toString(), total, result);
+                    JOptionPane.showMessageDialog(SelfDiagnosisFrame.this,
+                            "총점 "+total+"점 ("+result+")\n※ 진단이 아닌 참고 자료입니다.");
+                    dispose();
+                }
+            }
+        });
 
         actionBar.add(buttonGroup, BorderLayout.EAST);
 
@@ -268,16 +289,36 @@ public class SelfDiagnosisFrame extends JFrame {
                 public void mouseClicked(MouseEvent e) {
                     answers[currentIndex] = score;
                     renderOptions();
+                    if(currentIndex == 8 && score >0 ) {
+                        showCrisisNotice();
+                    }
                 }
             }));
         }
         optionList.revalidate();
         optionList.repaint();
     }
+    private void showCrisisNotice() {
+        JOptionPane.showMessageDialog(this,
+                "힘든 마음을 솔직하게 답해주셔서 감사합니다.\\n\"\n" +
+                        "            + \"혼자 견디지 않으셔도 괜찮아요. 지금 바로 이야기를 나눌 수 있는 곳이 있습니다.\\n\\n\"\n" +
+                        "            + \"자살예방 상담전화 109 (24시간)\\n\"\n" +
+                        "            + \"위급한 상황이라면 119에 연락해 주세요.\",\n" +
+                        "            \"도움이 필요하시다면\",\n" +
+                        "            JOptionPane.WARNING_MESSAGE);");
+    }
     private void showQuestion() {
         questionCardLabel1.setText("질문 " + (currentIndex + 1));
         questionTextArea.setText(questions[currentIndex]);
         progressChip.setText((currentIndex + 1) + " / 9");
         renderOptions();
+    }
+    private String interpret(int total) {
+        if (total <= 4) return "정상";
+        if (total <= 9) return "경증";
+        if (total <= 14) return "중등도";
+        if (total <= 19) return "중등도 - 심함";
+        return "심함";
+
     }
 }

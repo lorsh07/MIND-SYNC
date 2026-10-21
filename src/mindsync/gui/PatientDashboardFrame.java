@@ -6,6 +6,8 @@ import mindsync.db.DatabaseManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.awt.GridLayout;
 import mindsync.dao.SelfDiagnosisDAO;
@@ -100,6 +102,15 @@ public class PatientDashboardFrame extends JFrame {
             dashboardMenu.setAlignmentX(Component.LEFT_ALIGNMENT);
             dashboardMenu.setMaximumSize(new Dimension(Integer.MAX_VALUE,40));
             JLabel selfDiagnosisMenu = createInactiveMenu("자가진단");
+
+            selfDiagnosisMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            selfDiagnosisMenu.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    new SelfDiagnosisFrame(patientId);
+                }
+            });
+
             JLabel appointmentMenu = createInactiveMenu("진료 예약");
             JLabel prescriptionMenu = createInactiveMenu("처방·투약");
             JLabel communityMenu = createInactiveMenu("커뮤니티");
