@@ -9,33 +9,44 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 import mindsync.model.Appointment;
+import mindsync.model.Doctor;
 
 public class AppointmentDAO {
-    public String findDoctorIdByRegion(String region) {
-        String sql = "SELECT id FROM users WHERE role = '의사' AND region = ?";
+
+    public Doctor findDoctorByRegion(String region) {
+        String sql = "SELECT * FROM users WHERE role = '의사' AND region = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, region);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getString("id");
+                String id = rs.getString("id");
+                String username = rs.getString("username");
+                String passwordHash = rs.getString("password_hash");
+                String name = rs.getString("name");
+                String doctorRegion = rs.getString("region");
+                String licenseNumber = rs.getString("license_number");
+                String specialty = rs.getString("specialty");
+                return new Doctor(id, username, passwordHash, name, doctorRegion, licenseNumber, specialty);
             } else {
                 return null;
             }
-        }
-            catch(SQLException e) {
-                    e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
-                    }
+        }
 
     }
-    public boolean createAppointment(String patientId, String doctorId, String symptom, String consultationType) {
+
+
+
+    public boolean createAppointment(String patientId, String doctorId, String symptom, String consultationType,String scheduledAt) {
         String id = UUID.randomUUID().toString();
-        String sql = "INSERT INTO appointments (id, patientId, doctorId, symptom, status, doctorNotes, consultationType, meetingLink) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO appointments (id, patientId, doctorId, symptom, status, doctorNotes, consultationType, meetingLink, scheduledAt) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -48,6 +59,7 @@ public class AppointmentDAO {
             pstmt.setString(6, "");
             pstmt.setString(7, consultationType);
             pstmt.setString(8, "");
+            pstmt.setString(9, scheduledAt);
 
             pstmt.executeUpdate();
             return true;
