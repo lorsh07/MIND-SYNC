@@ -2,6 +2,7 @@ package mindsync.gui;
 
 import mindsync.dao.AppointmentDAO;
 import mindsync.dao.MedicationLogDAO;
+import mindsync.dao.UserDAO;
 import mindsync.db.DatabaseManager;
 
 import javax.swing.*;
@@ -74,9 +75,9 @@ public class PatientDashboardFrame extends JFrame {
                 //예정된 진료가 있을 때만 아래 코드를 실행해요.
                 String[] parts  = nextAppointment.getScheduledAt().split(" ");
                 //저장된 문자열을 가져오고, 띄어쓰기를 기준으로 잘라서 2개짜리 배열을 만들어줘요.
+                String doctorName = new UserDAO().getNameByUserId(nextAppointment.getDoctorId());
                 nextAppDate = parts[0];
-                //날짜
-                nextAppCaption = parts[1];
+                nextAppCaption = parts[1] + " · " + doctorName + " 선생님";
                 //시간
             }
 
@@ -112,6 +113,13 @@ public class PatientDashboardFrame extends JFrame {
             });
 
             JLabel appointmentMenu = createInactiveMenu("진료 예약");
+            appointmentMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            appointmentMenu.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    new AppointmentFrame(patientId);
+                }
+            });
             JLabel prescriptionMenu = createInactiveMenu("처방·투약");
             JLabel communityMenu = createInactiveMenu("커뮤니티");
             JLabel myPageMenu = createInactiveMenu("마이페이지");
@@ -210,8 +218,8 @@ public class PatientDashboardFrame extends JFrame {
             //"기분 추이" 글자 라벨을 만들고, 스펙대로 15px Bold, 진한 색
 
             JLabel moodPeriodLabel = new JLabel("최근 8주");
-            moodTitleLabel.setFont(loadFont("fonts/Pretendard-Regular.otf", 12));
-            moodTitleLabel.setForeground(new Color(0x8A,0x99,0x95));
+            moodPeriodLabel.setFont(loadFont("fonts/Pretendard-Regular.otf", 12));
+            moodPeriodLabel.setForeground(new Color(0x8A,0x99,0x95));
             //"최근 8주" 글자 라벨을 만들고, 12px Regular, 연한 회색
 
             moodHeaderRow.add(moodTitleLabel, BorderLayout.WEST);

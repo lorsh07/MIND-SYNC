@@ -2,6 +2,7 @@ package mindsync.gui;
 
 import mindsync.dao.SelfDiagnosisDAO;
 import mindsync.dao.UserDAO;
+import mindsync.model.Doctor;
 import mindsync.model.Patient;
 
 import javax.swing.*;
@@ -166,11 +167,17 @@ public class LoginFrame extends JFrame {
                 //passwordField.getPassword() — 비밀번호 입력창에서 값을 꺼내는데, 이건 좀 특이하게 char[](문자 배열) 타입
                 UserDAO userDAO = new UserDAO();
                 Patient loggedInPatient = userDAO.loginPatient(username,password);
+                Doctor loggedInDoctor = userDAO.loginDoctor(username,password);
 
                 if (loggedInPatient != null) {
                     JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공! 환영합니다, " + loggedInPatient.getName() + "님");
                     new PatientDashboardFrame(loggedInPatient.getId(),loggedInPatient.getName());
                     dispose();
+                }else if (loggedInDoctor != null) {
+                    JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공! 환영합니다, " + loggedInDoctor.getName() + "님");
+                    System.out.println("의사 로그인: " + loggedInDoctor.getName());
+                }else {
+                    JOptionPane.showMessageDialog(LoginFrame.this, "아이디 또는 비밀번호가 틀렸어요");
                 }
             }
         });

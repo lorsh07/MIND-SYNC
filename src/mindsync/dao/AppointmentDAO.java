@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import mindsync.model.Appointment;
 import mindsync.model.Doctor;
@@ -115,6 +117,34 @@ public class AppointmentDAO {
             return null;
         }
     }
+    public List<Appointment> getRequestsByDoctorId(String doctorId) {
+        String sql = "SELECT * FROM appointments WHERE doctorId = ? AND status = '요청'";
+        List<Appointment> list = new ArrayList<>();
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, doctorId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Appointment a = new Appointment(
+                       rs.getString("id"),
+                        rs.getString("patientId"),
+                        rs.getString("doctorId"),
+                        rs.getString("symptom"),
+                        rs.getString("consultationType")
+                );
+                a.setScheduledAt(rs.getString("scheduledAt"));
+                a.setStatus(rs.getString("status"));
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return list;
+    }
     public Appointment getNextAppointmentByPatientId(String patientId) {
         String sql = "SELECT * FROM appointments WHERE patientId = ? AND scheduledAt != '' ORDER BY scheduledAt ASC LIMIT 1";
 
@@ -146,4 +176,5 @@ public class AppointmentDAO {
             return null;
         }
     }
+
 }

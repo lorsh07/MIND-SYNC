@@ -7,10 +7,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class SelfDiagnosisFrame extends JFrame {
 
     private String patientId;
+
     private int currentIndex = 3;
     private int[] answers = new int[9];
 
@@ -19,6 +23,10 @@ public class SelfDiagnosisFrame extends JFrame {
     private JLabel questionCardLabel1;
     private JTextArea questionTextArea;
     private JPanel optionList;
+    private LocalDate bookingDate;
+    private JLabel summaryLabel;
+    private RoundedPanel bookButton;
+    private JLabel bookButtonLabel;
 
     private final String[] questions = {
             "지난 2주간, 일 또는 여가 활동을 하는 데 흥미나 즐거움을 느끼지 못한 날이 얼마나 되나요?",
@@ -189,6 +197,9 @@ public class SelfDiagnosisFrame extends JFrame {
             }
         });
 
+
+
+
         actionBar.add(buttonGroup, BorderLayout.EAST);
 
         mainCard.add(headerRow);
@@ -220,6 +231,7 @@ public class SelfDiagnosisFrame extends JFrame {
             return new Font("맑은 고딕", Font.PLAIN, (int) size);
         }
     }
+
 
     private RoundedPanel createOption(String text, boolean selected) {
         RoundedPanel option = new RoundedPanel(10);
@@ -298,6 +310,7 @@ public class SelfDiagnosisFrame extends JFrame {
         optionList.revalidate();
         optionList.repaint();
     }
+
     private void showCrisisNotice() {
         JOptionPane.showMessageDialog(this,
                 "힘든 마음을 솔직하게 답해주셔서 감사합니다.\\n\"\n" +
