@@ -25,6 +25,13 @@ public class RegisterFrame extends JFrame {
         setTitle("MIND SYNC - 회원가입");
         setSize(400,550);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        // 가입하지 않고 X로 닫으면 로그인 화면으로 돌아간다
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                new LoginFrame();
+            }
+        });
         //DISPOSE_ON_CLOSE — "이 창만 닫아라, 나머지 프로그램은 계속 실행돼도 된다"는 뜻
         setLocationRelativeTo(null);
 
@@ -139,6 +146,12 @@ public class RegisterFrame extends JFrame {
                 }
                 if (success) {
                     JOptionPane.showMessageDialog(RegisterFrame.this,"회원가입이 완료되었습니다!");
+                    // 가입한 계정으로 바로 대시보드를 연다
+                    if (patientRadio.isSelected()) {
+                        new PatientDashboardFrame(id, name);
+                    } else {
+                        new DoctorDashboardFrame(id, name);
+                    }
                     dispose();
                 }else {
                     JOptionPane.showMessageDialog(RegisterFrame.this,"회원가입에 실패했습니다. 다시 시도해주세요");
