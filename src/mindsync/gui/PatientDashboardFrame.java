@@ -16,6 +16,9 @@ import mindsync.model.Appointment;
 import mindsync.model.MedicationLog;
 import mindsync.model.SelfDiagnosisResult;
 import java.util.List;
+import java.time.LocalDate;
+import mindsync.dao.PrescriptionDAO;
+import mindsync.model.Prescription;
 
 
 
@@ -41,26 +44,12 @@ public class PatientDashboardFrame extends JFrame {
             }
 
             MedicationLogDAO medicationLogDAO = new MedicationLogDAO();
-            List<MedicationLog> medicationLogs = medicationLogDAO.getLogsByPatientId(patientId);
-            //— 그 환자의 모든 투약 기록을 리스트로 가져와요.
 
+            int adherencePercent = medicationLogDAO.getAdherencePercent(patientId);
             String adherenceValue = "-";
-            String adherenceCaption = "기록 없음";
-
-            if (!medicationLogs.isEmpty()) {
-                int takenCount = 0;
-                //"복용한 날 수"를 셀 변수를 0부터 시작
-                for(int i = 0; i < medicationLogs.size(); i++) {
-                    //리스트에 있는 기록들을 처음부터 끝까지 하나씩 훑어봐요.
-                    if(medicationLogs.get(i).isTaken()) {
-                        //i번째 기록을 꺼내서, isTaken()(복용했는지 여부, boolean)이 true인지 확인
-                        takenCount = takenCount + 1;
-                        //복용한 기록이면, 카운터를 1 늘려요. 이 반복문이 다 끝나면 takenCount에는 "총 몇 번 복용했는지"가 담겨요.
-                    }
-                }
-                int percentage = (takenCount * 100) / medicationLogs.size();
-                //비율 계산
-                adherenceValue = percentage + "%";
+            String adherenceCaption = "처방 없음";
+            if (adherencePercent >= 0) {
+                adherenceValue = adherencePercent + "%";
                 adherenceCaption = "최근 30일";
             }
 
@@ -121,8 +110,21 @@ public class PatientDashboardFrame extends JFrame {
                 }
             });
             JLabel prescriptionMenu = createInactiveMenu("처방·투약");
-            JLabel communityMenu = createInactiveMenu("커뮤니티");
+            prescriptionMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            prescriptionMenu.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    new PrescriptionFrame(patientId, patientName);
+                }
+            });
             JLabel myPageMenu = createInactiveMenu("마이페이지");
+            myPageMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            myPageMenu.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    new MyPageFrame(patientId, patientName);
+                }
+            });
 
             ImageIcon logoIcon = new ImageIcon("assets/mind-sync-mark-white-512.png");
             Image scaledLogo = logoIcon.getImage().getScaledInstance(22,22, Image.SCALE_SMOOTH);
@@ -144,8 +146,6 @@ public class PatientDashboardFrame extends JFrame {
             sidebar.add(appointmentMenu);
             sidebar.add(Box.createVerticalStrut(4));
             sidebar.add(prescriptionMenu);
-            sidebar.add(Box.createVerticalStrut(4));
-            sidebar.add(communityMenu);
             sidebar.add(Box.createVerticalStrut(4));
             sidebar.add(myPageMenu);
             add(sidebar, BorderLayout.WEST);
@@ -269,7 +269,12 @@ public class PatientDashboardFrame extends JFrame {
             medicationBanner.setAlignmentX(Component.LEFT_ALIGNMENT);
             medicationBanner.setMaximumSize(new Dimension(Integer.MAX_VALUE,60));
 
-            JLabel medicationText = new JLabel("오늘 저녁 8시 · 세르트랄린 50mg");
+            // 가장 최근 처방을 가져와서 오늘 복용 체크를 할 수 있게 한다
+            List<Prescription> prescriptions = new PrescriptionDAO().getPrescriptionsByPatientId(patientId);
+            Prescription latestPrescription = prescriptions.isEmpty() ? null : prescriptions.get(prescriptions.size() - 1);
+            String today = LocalDate.now().toString();
+
+            JLabel medicationText = new JLabel("처방받은 약이 아직 없어요");
             medicationText.setFont(loadFont("fonts/Pretendard-Regular.otf", 14));
             medicationText.setForeground(new Color(0x4C,0x5A,0x56));
 
@@ -279,6 +284,27 @@ public class PatientDashboardFrame extends JFrame {
             checkButton.setOpaque(true);
             checkButton.setBackground(new Color(21,100,90));
             checkButton.setBorder(BorderFactory.createEmptyBorder(9,14,9,14));
+
+            if (latestPrescription == null) {
+                checkButton.setVisible(false);
+            } else {
+                medicationText.setText("오늘 복용 · " + latestPrescription.getMedicationName() + " " + latestPrescription.getDosage());
+                if (medicationLogDAO.isTakenOn(latestPrescription.getId(), today)) {
+                    checkButton.setText("복용 완료");
+                    checkButton.setBackground(new Color(0xD9,0xE7,0xE2));
+                    checkButton.setForeground(new Color(0x15,0x64,0x5A));
+                } else {
+                    checkButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    checkButton.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            medicationLogDAO.createLog(patientId, latestPrescription.getId(), today, true, "");
+                            dispose();
+                            new PatientDashboardFrame(patientId, patientName);
+                        }
+                    });
+                }
+            }
 
             medicationBanner.add(medicationText, BorderLayout.WEST);
             medicationBanner.add(checkButton, BorderLayout.EAST);

@@ -26,7 +26,7 @@ import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
-import java.util.List;;
+import java.util.List;
 
 import mindsync.gui.PatientDashboardFrame;
 import mindsync.model.SelfDiagnosisResult;
@@ -174,8 +174,9 @@ public class LoginFrame extends JFrame {
                     new PatientDashboardFrame(loggedInPatient.getId(),loggedInPatient.getName());
                     dispose();
                 }else if (loggedInDoctor != null) {
-                    JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공! 환영합니다, " + loggedInDoctor.getName() + "님");
-                    System.out.println("의사 로그인: " + loggedInDoctor.getName());
+                    JOptionPane.showMessageDialog(LoginFrame.this, "로그인 성공! 환영합니다, " + loggedInDoctor.getName() + " 선생님");
+                    new DoctorDashboardFrame(loggedInDoctor.getId(), loggedInDoctor.getName());
+                    dispose();
                 }else {
                     JOptionPane.showMessageDialog(LoginFrame.this, "아이디 또는 비밀번호가 틀렸어요");
                 }
