@@ -6,7 +6,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseManager {
-    private static final String URL = "jdbc:sqlite:mindsync.db";
+    private static final String URL = "jdbc:sqlite:" + dbPath();
+
+    // 기본은 실행 폴더의 mindsync.db (IntelliJ 실행).
+    // 실행 파일(START.bat)은 -Dmindsync.userData=true 를 줘서 사용자 폴더\MIND_SYNC_DATA\mindsync.db 에 저장한다.
+    private static String dbPath() {
+        if (Boolean.getBoolean("mindsync.userData")) {
+            java.io.File dir = new java.io.File(System.getProperty("user.home"), "MIND_SYNC_DATA");
+            dir.mkdirs();
+            return new java.io.File(dir, "mindsync.db").getAbsolutePath();
+        }
+        return "mindsync.db";
+    }
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL);
