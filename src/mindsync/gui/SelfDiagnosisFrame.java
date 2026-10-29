@@ -174,16 +174,6 @@ public class SelfDiagnosisFrame extends JFrame {
                 if (currentIndex < 8) {
                     currentIndex++;
                     showQuestion();
-                }
-            }
-        });
-        nextButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (answers[currentIndex] == -1) return;
-                if (currentIndex < 8) {
-                    currentIndex++;
-                    showQuestion();
                 }else{
                     int total = 0;
                     for(int a : answers) total += a;
@@ -313,12 +303,12 @@ public class SelfDiagnosisFrame extends JFrame {
 
     private void showCrisisNotice() {
         JOptionPane.showMessageDialog(this,
-                "힘든 마음을 솔직하게 답해주셔서 감사합니다.\\n\"\n" +
-                        "            + \"혼자 견디지 않으셔도 괜찮아요. 지금 바로 이야기를 나눌 수 있는 곳이 있습니다.\\n\\n\"\n" +
-                        "            + \"자살예방 상담전화 109 (24시간)\\n\"\n" +
-                        "            + \"위급한 상황이라면 119에 연락해 주세요.\",\n" +
-                        "            \"도움이 필요하시다면\",\n" +
-                        "            JOptionPane.WARNING_MESSAGE);");
+                "힘든 마음을 솔직하게 답해주셔서 감사합니다.\n"
+                        + "혼자 견디지 않으셔도 괜찮아요. 지금 바로 이야기를 나눌 수 있는 곳이 있습니다.\n\n"
+                        + "자살예방 상담전화 109 (24시간)\n"
+                        + "위급한 상황이라면 119에 연락해 주세요.",
+                "도움이 필요하시다면",
+                JOptionPane.WARNING_MESSAGE);
     }
     private void showQuestion() {
         questionCardLabel1.setText("질문 " + (currentIndex + 1));
