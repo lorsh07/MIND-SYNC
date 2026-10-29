@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 
 
 public class UserDAO {
@@ -148,5 +150,24 @@ public class UserDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // 가입된 의사 전체 (이름순)
+    public List<Doctor> getAllDoctors() {
+        List<Doctor> list = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE role = '의사' ORDER BY name";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                list.add(new Doctor(rs.getString("id"), rs.getString("username"),
+                        rs.getString("password_hash"), rs.getString("name"),
+                        rs.getString("region"), rs.getString("license_number"),
+                        rs.getString("specialty")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }
