@@ -108,17 +108,30 @@ public class RegisterFrame extends JFrame {
                 String id = UUID.randomUUID().toString();
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
-                String name = nameField.getText();
+                String name = nameField.getText().trim();
+                username = username.trim();
+
+                String extra = patientRadio.isSelected()
+                        ? regionField.getText().trim()
+                        : hospitalRegionField.getText().trim() + licenseField.getText().trim() + specialtyField.getText().trim();
+                boolean doctorEmpty = !patientRadio.isSelected()
+                        && (hospitalRegionField.getText().trim().isEmpty()
+                        || licenseField.getText().trim().isEmpty()
+                        || specialtyField.getText().trim().isEmpty());
+                if (username.isEmpty() || password.isEmpty() || name.isEmpty() || extra.isEmpty() || doctorEmpty) {
+                    JOptionPane.showMessageDialog(RegisterFrame.this, "모든 항목을 입력해주세요.");
+                    return;
+                }
 
                 UserDAO userDAO = new UserDAO();
                 boolean success;
 
                 if (patientRadio.isSelected()) {
-                    String region = regionField.getText();
+                    String region = regionField.getText().trim();
                     Patient newPatient = new Patient(id, username, password, name, region);
                     success = userDAO.registerPatient(newPatient);
                 }else {
-                    String hospitalRegion = hospitalRegionField.getText();
+                    String hospitalRegion = hospitalRegionField.getText().trim();
                     String licence = licenseField.getText();
                     String specialty = specialtyField.getText();
                     Doctor newDoctor = new Doctor(id, username, password, name, hospitalRegion, licence, specialty);

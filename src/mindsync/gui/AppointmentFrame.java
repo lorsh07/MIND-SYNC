@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.awt.event.*;
 
-import static java.awt.SystemColor.text;
 
 public class AppointmentFrame extends JFrame {
     private String patientId;
@@ -37,7 +36,6 @@ public class AppointmentFrame extends JFrame {
 
         String region = new UserDAO().getRegionByUserId(patientId);
         Doctor doctor = new AppointmentDAO().findDoctorByRegion(region);
-        System.out.println("지역: " + region + " / 의사: " + (doctor == null ? "없음" : doctor.getName()));
 
 
         RoundedPanel mainCard = new RoundedPanel(14);
@@ -216,6 +214,10 @@ public class AppointmentFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (selectedSlot == null) return;
+                if (doctor == null) {
+                    JOptionPane.showMessageDialog(AppointmentFrame.this, "같은 지역에 배정 가능한 의사가 없어 예약할 수 없어요.");
+                    return;
+                }
 
                 String scheduledAt = bookingDate + " " + selectedSlot;
                 boolean ok = new AppointmentDAO().createAppointment(
